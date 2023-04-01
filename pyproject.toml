@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "referral-network"
+version = "0.1.0"
+description = ""
+authors = ["Jake Brehm <jake.m.brehm@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "referral_network"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^1.5.3"
+Flask = "^2.2.3"
+plotly = "^5.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
