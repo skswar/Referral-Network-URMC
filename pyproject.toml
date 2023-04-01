@@ -12,6 +12,8 @@ python = "^3.10"
 pandas = "^1.5.3"
 Flask = "^2.2.3"
 plotly = "^5.14.0"
+flask-wtf = "^1.1.1"
+wtforms = "^3.0.1"
 
 
 [build-system]

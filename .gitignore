@@ -1,2 +1,9 @@
+# Project-specific
+ide/
+*.csv
+
+# Python artifacts
+*.pyc
+
 # Platform-specific
 .DS_Store
