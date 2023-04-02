@@ -5,6 +5,7 @@ from flask import Flask, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
 
 import helper
+import visualize
 
 
 # Initialize the Flask application
@@ -27,8 +28,9 @@ def index():
 
     df = pd.read_csv(data_path) if data_exists else None
     df_html = df.head().to_html(index=False) if data_exists else None
+    graph_json = visualize.make_graph(data_path) if data_exists else None
 
-    return render_template("index.html", data_exists=data_exists, df=df_html)
+    return render_template("index.html", graph=graph_json)
 
 
 @app.route("/upload", methods=["GET", "POST"])
