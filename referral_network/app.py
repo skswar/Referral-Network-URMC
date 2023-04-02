@@ -1,3 +1,5 @@
+import io
+import json
 import os
 
 import pandas as pd
@@ -22,14 +24,16 @@ def index():
     data_path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), # project directory
         app.config["UPLOAD_FOLDER"],                # upload directory
-        secure_filename("data.csv")                 # filename
+        secure_filename("graph.json")               # filename
     )
     data_exists = os.path.isfile(data_path)
 
-    df = pd.read_csv(data_path) if data_exists else None
-    df_html = df.head().to_html(index=False) if data_exists else None
-    graph_json = visualize.make_graph(data_path) if data_exists else None
-
+    if data_exists:
+        with open(data_path, "r") as graph_data:
+            graph_json = graph_data.read()
+    else:
+        graph_json = None
+    
     return render_template("index.html", graph=graph_json)
 
 
@@ -46,11 +50,19 @@ def upload():
         file_to_upload = request.files["uploadFile"]
         # Check if the file exists and is a valid filetype
         if file_to_upload and helper.valid_filetype(file_to_upload.filename):
-            # Save the file
-            file_to_upload.save(os.path.join(
+            # TODO: Check if format is correct
+            ...
+
+            # Read file into dataframe in memory
+            data_string = str(file_to_upload.read(), "utf-8")
+            data_stream = io.StringIO(data_string)
+            df = pd.read_csv(data_stream)
+
+            # Create and save the visualization
+            visualize.graphjson_from_df(df, output_path=os.path.join(
                 os.path.abspath(os.path.dirname(__file__)), # project directory
                 app.config["UPLOAD_FOLDER"],                # upload directory
-                secure_filename("data.csv")                 # filename
+                secure_filename("graph.json")               # filename
             ))
     
     # Redirect to the homepage
