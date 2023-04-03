@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Main entry point for the Flask web application.
+"""
+
+
 import io
 import json
 import os
@@ -6,6 +14,7 @@ import pandas as pd
 from flask import Flask, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
 
+import config
 import helper
 import visualize
 
@@ -13,7 +22,7 @@ import visualize
 # Initialize the Flask application
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "123bnfsdbjfyusdf67vcnjakdhs"
-app.config["UPLOAD_FOLDER"] = "static/files"
+app.config["UPLOAD_FOLDER"] = config.UPLOAD_FOLDER
 
 
 @app.route("/")
@@ -21,20 +30,24 @@ app.config["UPLOAD_FOLDER"] = "static/files"
 def index():
     """Homepage of the dashboard."""
 
-    data_path = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), # project directory
-        app.config["UPLOAD_FOLDER"],                # upload directory
-        secure_filename("graph.json")               # filename
-    )
+    # Construct the path to the graph JSON file
+    data_path = helper.get_graph_json_path()
+    # Determine if the graph JSON file exists at that path
     data_exists = os.path.isfile(data_path)
 
+    # If the graph json exists, read the data
     if data_exists:
         with open(data_path, "r") as graph_data:
             graph_json = graph_data.read()
     else:
         graph_json = None
     
-    return render_template("index.html", graph=graph_json)
+    # Render the page given the following variables
+    return render_template(
+        "index.html",
+        valid_extensions=config.VALID_EXTENSIONS,
+        graph=graph_json,
+    )
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -59,11 +72,10 @@ def upload():
             df = pd.read_csv(data_stream)
 
             # Create and save the visualization
-            visualize.graphjson_from_df(df, output_path=os.path.join(
-                os.path.abspath(os.path.dirname(__file__)), # project directory
-                app.config["UPLOAD_FOLDER"],                # upload directory
-                secure_filename("graph.json")               # filename
-            ))
+            visualize.graphjson_from_df(
+                df,
+                output_path=helper.get_graph_json_path(),
+            )
     
     # Redirect to the homepage
     return redirect(url_for("index"))

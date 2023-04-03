@@ -4,32 +4,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Referral Network</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 </head>
 <body>
 
     <nav class="navbar navbar-light bg-light justify-content-between">
         <a class="navbar-brand px-4">Specialty Referral Network</a>
-        <form class="form-inline">
+        <form action="/upload" method="POST" class="form-inline" enctype="multipart/form-data">
             <div class="row g-1">
                 <div class="col">
-                    <input type="file" class="form-control" id="uploadFile" name="uploadFile">
+                    <input type="file" accept="{{ ', '.join(valid_extensions) }}" class="form-control" id="uploadFile" name="uploadFile">
                 </div>
                 <div class="col-3">
-                    <button type="button" class="btn btn-primary">Upload</button>
+                    <button class="btn btn-primary">Upload</button>
                 </div>
             </div>
         </form>
     </nav>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid d-flex h-100 flex-column">
+        <div class="row flex-grow-1 overflow-auto">
             <div class="col">
                 {% if graph %}
                 <div id="chart" class="chart"></div>
                 {% else %}
-                Data has not yet been uploaded or loaded.
+                <div class="alert alert-primary" role="alert">
+                    Data has not yet been uploaded or loaded.
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -40,8 +47,13 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-  var graphs = {{ graph|safe }};
-  Plotly.plot("chart", graphs, {});
+    {% if graph %}
+    var graphs = {{ graph|safe }};
+    Plotly.plot("chart", graphs, {responsive: true});
+    window.onresize = function() {
+        Plotly.Plots.resize("chart");
+    }
+    {% endif %}
 </script>
 
 </html>

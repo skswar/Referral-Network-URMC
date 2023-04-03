@@ -1,6 +1,7 @@
 # Project-specific
 ide/
 *.csv
+*.json
 
 # Python artifacts
 *.pyc

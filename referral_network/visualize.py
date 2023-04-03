@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Functions to visualize the network.
+"""
+
+
 import io
 import json
 
@@ -577,7 +585,10 @@ def graphjson_from_df(synthetic_referral: pd.DataFrame, output_path: str):
             xref="paper",
             x=0
         ),
-        margin_b=90,
+        height=700,
+        width=1600,
+        # autosize=True,
+        # margin_b=90,
         annotations = [dict(xref='paper',
                             yref='paper',
                             x=0.5, y=-0.07,
@@ -594,6 +605,8 @@ def graphjson_from_df(synthetic_referral: pd.DataFrame, output_path: str):
     fig.update_xaxes(showticklabels = False)
 
     fig.update_yaxes(showticklabels = False)
+
+    # fig.update_yaxes(automargin=True)
 
     # fig.show()
 
