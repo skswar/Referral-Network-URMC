@@ -81,4 +81,5 @@ def upload():
 
 
 if __name__ == "__main__":
+    helper.create_upload_folder()
     app.run(debug=True)

@@ -13,6 +13,22 @@ from werkzeug.utils import secure_filename
 import config
 
 
+def create_upload_folder() -> None:
+    """Creates the `files` folder in the static directory for uploaded files."""
+
+    if not os.path.exists(get_upload_folder_path()):
+        os.makedirs(get_upload_folder_path())
+
+
+def get_upload_folder_path() -> str:
+    """Gets the filepath of the folder where uploaded files are stored."""
+
+    return os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),     # project directory
+        config.UPLOAD_FOLDER,                           # upload directory
+    )
+
+
 def valid_filetype(filename: str) -> bool:
     """Returns whether or not the specified file is of a valid filetype."""
     return os.path.splitext(filename)[1] in config.VALID_EXTENSIONS
