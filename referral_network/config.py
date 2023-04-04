@@ -8,6 +8,9 @@ Configuration variables for the Flask application.
 
 from typing import Final
 
+
+LOGGING_FILENAME: Final = "output.log"
+
 UPLOAD_FOLDER: Final = "static/files"
 
 VALID_EXTENSIONS: Final = {

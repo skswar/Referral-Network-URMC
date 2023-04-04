@@ -13,6 +13,15 @@ from werkzeug.utils import secure_filename
 import config
 
 
+def get_logging_path() -> str:
+    """Gets the filepath of the logging file."""
+
+    outer_directory = os.path.abspath(
+        os.path.dirname(os.path.dirname(__file__))      # two levels out
+    )
+    return os.path.join(outer_directory, config.LOGGING_FILENAME)
+
+
 def create_upload_folder() -> None:
     """Creates the `files` folder in the static directory for uploaded files."""
 

@@ -8,6 +8,7 @@ Main entry point for the Flask web application.
 
 import io
 import json
+import logging
 import os
 
 import pandas as pd
@@ -17,6 +18,9 @@ import config
 import helper
 import visualize
 
+
+# Configure logging module
+logging.basicConfig(filename=helper.get_logging_path(), level=logging.DEBUG)
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -36,9 +40,11 @@ def index():
 
     # If the graph json exists, read the data
     if data_exists:
+        app.logger.info(f"Data file exists at: {data_path}")
         with open(data_path, "r") as graph_data:
             graph_json = graph_data.read()
     else:
+        app.logger.info(f"Data file does not exist at: {data_path}")
         graph_json = None
     
     # Render the page given the following variables
@@ -62,6 +68,8 @@ def upload():
         file_to_upload = request.files["uploadFile"]
         # Check if the file exists and is a valid filetype
         if file_to_upload and helper.valid_filetype(file_to_upload.filename):
+            app.logger.info("CSV file was uploaded")
+
             # TODO: Check if format is correct
             ...
 
@@ -71,9 +79,13 @@ def upload():
             df = pd.read_csv(data_stream)
 
             # Create and save the visualization
+            app.logger.info("Creating visualization from uploaded file")
             visualize.graphjson_from_df(
                 df,
                 output_path=helper.get_graph_json_path(),
+            )
+            app.logger.info(
+                f"Graph JSON file created at: {helper.get_graph_json_path()}"
             )
     
     # Redirect to the homepage

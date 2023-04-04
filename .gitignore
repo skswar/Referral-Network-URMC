@@ -2,6 +2,7 @@
 ide/
 *.csv
 *.json
+*.log
 
 # Python artifacts
 *.pyc

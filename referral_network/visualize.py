@@ -71,8 +71,6 @@ def make_edge_middlepoints(x, y, text, opc, col):
 
 def make_graph(path: str):
 
-    print("creating graph...")
-
     synthetic_referral = pd.read_csv(path)
 
 
@@ -336,15 +334,11 @@ def make_graph(path: str):
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    print("returning graph...")
-
     return graphJSON
 
 
 
 def graphjson_from_df(synthetic_referral: pd.DataFrame, output_path: str):
-
-    print("creating graph...")
 
     # synthetic_referral = pd.read_csv(path)
 
@@ -619,8 +613,6 @@ def graphjson_from_df(synthetic_referral: pd.DataFrame, output_path: str):
     
     with open(output_path, "w") as graph_json:
         json.dump(fig, graph_json, cls=plotly.utils.PlotlyJSONEncoder)
-
-    print("returning graph...")
 
     # return graphJSON
 
