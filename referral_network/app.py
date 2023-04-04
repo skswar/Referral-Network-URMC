@@ -12,7 +12,6 @@ import os
 
 import pandas as pd
 from flask import Flask, redirect, render_template, request, url_for
-from werkzeug.utils import secure_filename
 
 import config
 import helper

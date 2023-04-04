@@ -14,19 +14,32 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-light bg-light justify-content-between">
-        <a class="navbar-brand px-4">Specialty Referral Network</a>
+    <nav class="navbar navbar-dark bg-primary justify-content-between">
+        <a class="navbar-brand px-4" href="#">
+            <!-- <img src="{{ url_for('static', filename='img/ur_logo.png') }}" alt="ur-logo" class="img-fluid" style="max-width: 5%;"> -->
+            Specialty Referral Network
+        </a>
         <form action="/upload" method="POST" class="form-inline" enctype="multipart/form-data">
-            <div class="row g-1">
+            <div class="row g-2">
                 <div class="col">
                     <input type="file" accept="{{ ', '.join(valid_extensions) }}" class="form-control" id="uploadFile" name="uploadFile">
                 </div>
                 <div class="col-3">
-                    <button class="btn btn-primary">Upload</button>
+                    <button class="btn btn-outline-light">Upload</button>
                 </div>
             </div>
+            <!-- <input type="file" accept="{{ ', '.join(valid_extensions) }}" class="form-control" id="uploadFile" name="uploadFile">
+            <button class="btn btn-outline-light">Upload</button> -->
         </form>
     </nav>
+
+    <!-- <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Navbar</a>
+        <form class="form-horizonal form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </nav> -->
 
     <div class="container-fluid d-flex h-100 flex-column">
         <div class="row flex-grow-1 overflow-auto">
@@ -34,7 +47,7 @@
                 {% if graph %}
                 <div id="chart" class="chart"></div>
                 {% else %}
-                <div class="alert alert-primary" role="alert">
+                <div class="alert alert-primary mt-3" role="alert">
                     Data has not yet been uploaded or loaded.
                 </div>
                 {% endif %}
