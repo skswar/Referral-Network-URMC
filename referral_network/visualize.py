@@ -579,8 +579,8 @@ def graphjson_from_df(synthetic_referral: pd.DataFrame, output_path: str):
             xref="paper",
             x=0
         ),
-        height=700,
-        width=1600,
+        # height=700,
+        # width=1600,
         # autosize=True,
         # margin_b=90,
         annotations = [dict(xref='paper',
