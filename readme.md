@@ -1,12 +1,6 @@
-<div align="center">
-<h1>Specialty Referral Network</h1>
-</div>
+# Specialty Referral Network
 
-<!-- <p align="center">
-    <strong>demesstify</strong> is a Python library that demystifies your messages and allows for easy analysis and visualization of conversations.
-</p> -->
-
-<hr>
+---
 
 ## Table of contents
 
