@@ -17,4 +17,6 @@ VALID_EXTENSIONS: Final = {
     ".csv",
 }
 
+GRAPH_CSV_FILENAME: Final = "graph.csv"
+
 GRAPH_JSON_FILENAME: Final = "graph.json"

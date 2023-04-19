@@ -19,8 +19,8 @@ import helper
 import visualize
 
 
-# Configure logging module
-logging.basicConfig(filename=helper.get_logging_path(), level=logging.DEBUG)
+# # Configure logging module
+# logging.basicConfig(filename=helper.get_logging_path(), level=logging.WARNING)
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -73,10 +73,11 @@ def upload():
             # TODO: Check if format is correct
             ...
 
-            # Read file into dataframe in memory
-            data_string = str(file_to_upload.read(), "utf-8")
-            data_stream = io.StringIO(data_string)
-            df = pd.read_csv(data_stream)
+            # Save the file to disk for easy access
+            file_to_upload.save(helper.get_graph_csv_path())
+
+            # Read file into dataframe
+            df = pd.read_csv(helper.get_graph_csv_path())
 
             # Create and save the visualization
             app.logger.info("Creating visualization from uploaded file")
@@ -85,9 +86,47 @@ def upload():
                 output_path=helper.get_graph_json_path(),
             )
             app.logger.info(
-                f"Graph JSON file created at: {helper.get_graph_json_path()}"
+                f"Graph JSON file saved at: {helper.get_graph_json_path()}"
             )
     
+    # Redirect to the homepage
+    return redirect(url_for("index"))
+
+
+@app.route("/modify", methods=["GET", "POST"])
+def modify():
+    """Modifies an existing visualization via POST method.
+    
+    Redirects the user back to the homepage if accessed by URL.
+    """
+
+    # Check if the request was posted by the form on the homepage
+    if request.method == "POST" and os.path.exists(helper.get_graph_csv_path()):
+        app.logger.info("Visualization modification requested")
+
+        # Read the values on the form
+        minimum_referrals = request.form.get('min-referrals')
+        app.logger.info(f"Setting minimum referrals: {minimum_referrals}")
+
+        # TODO: Handle minimum referrals <= 0
+
+        # TODO: Check if format is correct
+        ...
+
+        # Read file into dataframe
+        df = pd.read_csv(helper.get_graph_csv_path())
+
+        # Create and save the visualization
+        app.logger.info("Modifying visualization from uploaded file")
+        visualize.graphjson_from_df(
+            df,
+            output_path=helper.get_graph_json_path(),
+            minimum_referrals=int(minimum_referrals),
+        )
+        app.logger.info(
+            f"Graph JSON file saved at: {helper.get_graph_json_path()}"
+        )
+
     # Redirect to the homepage
     return redirect(url_for("index"))
 
