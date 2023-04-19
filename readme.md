@@ -1,7 +1,5 @@
 # Specialty Referral Network
 
----
-
 ## Table of contents
 
 <!-- * [Main features](#main-features) -->
