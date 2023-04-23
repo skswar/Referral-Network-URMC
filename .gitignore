@@ -1,6 +1,7 @@
 # Project-specific
 ide/
 referral_network/static/files/
+notebooks/
 *.csv
 *.json
 *.log
