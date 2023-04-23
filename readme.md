@@ -170,6 +170,7 @@ It is possible to filter the visualization by department, i.e., only referrals t
 The following potential improvements are listed in no particular order.
 
 - Allow support for uploading Excel spreadsheets in addition to CSV files
+- Add tooltips to UI items such as the customizability controls
 - Implement a memory of the visualization settings between sessions
 - Added more customizability to the visualization via the sidebar
 

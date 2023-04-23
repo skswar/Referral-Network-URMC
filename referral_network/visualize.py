@@ -26,6 +26,9 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import networkx.algorithms.community as nxcom
 
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
+
 def queue(a, b, qty):
     """either x0 and x1 or y0 and y1, qty of points to create"""
     q = deque()
@@ -80,6 +83,11 @@ def graphjson_from_df(
         synthetic_referral: pd.DataFrame,
         output_path: str,
         minimum_referrals: Optional[int]=None,
+        # degree_filter: str="Both",
+        degree_filter: Optional[str]=None,
+        # department_filter: Optional[int]=None,
+        node_pair_efficiency: Optional[float]=None,
+        department_filter: Optional[str]=None,
     ):
 
     """#### Loading Data"""
@@ -102,10 +110,20 @@ def graphjson_from_df(
     if minimum_referrals:
         synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["count_of_appointments"] >= minimum_referrals]
 
+    # if department_filter:
+    #     synthetic_referral_grp = synthetic_referral_grp.query(
+    #         f"(`Referred From` == {department_filter}) | (`Referred To` == {department_filter})"
+    #     )
+
     synthetic_referral_grp['Referring_DepartmentName'] = np.where(synthetic_referral_grp['Referred From']==2,\
                                                     'Primary Care','Other')
     synthetic_referral_grp['Referred_To_DepartmentName'] = np.where(synthetic_referral_grp['Referred To']==2,\
                                                     'Primary Care','Other')
+
+    if department_filter and department_filter != "All":
+        synthetic_referral_grp = synthetic_referral_grp.query(
+            f"(`Referring_DepartmentName` == '{department_filter}') | (`Referred_To_DepartmentName` == '{department_filter}')"
+        )
 
     synthetic_referral_grp['node_pair_efficiency'] = synthetic_referral_grp['count_of_appointments']/\
                                                         synthetic_referral_grp["Total Days to Schedule"]
@@ -128,6 +146,11 @@ def graphjson_from_df(
 
     synthetic_referral_grp['node_pair_efficiency_scaled'] = MinMaxScaler().fit_transform\
             (np.array(synthetic_referral_grp['node_pair_efficiency']).reshape(-1,1))
+
+    if node_pair_efficiency:
+        # TODO: handle case where no nodes match
+        print(f"{node_pair_efficiency=}")
+        synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["node_pair_efficiency_scaled"] >= node_pair_efficiency]
 
     synthetic_referral_grp['count_of_appointments_norm'] = StandardScaler().fit_transform\
             (synthetic_referral_grp[['count_of_appointments']]).flatten()
@@ -223,12 +246,21 @@ def graphjson_from_df(
 
     """**This part of the in-out degree view code part which I have sent you in Teams as well**"""
 
-    ## code for In-Out Degree View
-    input_var = "Out-Degree" ##three values are 'Both', 'In-Degree', 'Out-Degree'
-    degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{input_var}"')['node'].values)
+    if degree_filter and degree_filter != "All":
+        # ## code for In-Out Degree View
+        # input_var = "Out-Degree" ##three values are 'Both', 'In-Degree', 'Out-Degree'
+        # degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{input_var}"')['node'].values)
 
-    # synthetic_referral_grp.query\
-    #             (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
+        ## code for In-Out Degree View
+        # input_var = "Out-Degree" ##three values are 'Both', 'In-Degree', 'Out-Degree'
+        degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{degree_filter}"')['node'].values)
+
+        # synthetic_referral_grp.query\
+        #             (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
+
+        synthetic_referral_grp = synthetic_referral_grp.query\
+                    (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
+
 
     """#### Calculating Number of Outgoing and Incoming Connection For Each Node"""
 
@@ -343,7 +375,8 @@ def graphjson_from_df(
                                             size  = [],
                                             line  = None))
 
-    common_nodes = list(nodesize_df.query('`in-degree` !=0 and `out-degree`!=0')['node'])
+    # TODO: does not work with high minimum referrals (e.g., 1000) and primary care
+    common_nodes = list(nodesize_df.query('`in-degree` != 0 and `out-degree`!= 0')['node'])
 
     # For each node in referral, get the position and size and add to the node_trace
     for node in referral.nodes():
@@ -418,7 +451,7 @@ def graphjson_from_df(
     fig.update_layout(
         showlegend = False,
         title=go.layout.Title(
-            text="Network of Referral <br>"\
+            text="Network of Referrals <br>"\
                 +"<sup>The larger the node, the more connected it is to other departments.<br></sup>",
             xref="paper",
             x=0

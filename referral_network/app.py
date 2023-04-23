@@ -105,8 +105,17 @@ def modify():
         app.logger.info("Visualization modification requested")
 
         # Read the values on the form
-        minimum_referrals = request.form.get('min-referrals')
+        minimum_referrals = request.form.get("min-referrals")
         app.logger.info(f"Setting minimum referrals: {minimum_referrals}")
+
+        department_filter = request.form.get("department-filter")
+        app.logger.info(f"Setting department: {department_filter}")
+
+        node_pair_efficiency = request.form.get("node-pair-efficiency")
+        app.logger.info(f"Setting node pair efficiency: {node_pair_efficiency}")
+
+        degree_filter = request.form.get("degree-filter")
+        app.logger.info(f"Setting degree directionality: {degree_filter}")
 
         # TODO: Handle minimum referrals <= 0
 
@@ -122,6 +131,14 @@ def modify():
             df,
             output_path=helper.get_graph_json_path(),
             minimum_referrals=int(minimum_referrals),
+            # degree_filter="Out-Degree",
+            # degree_filter="In-Degree",
+            # degree_filter="Both",
+            # degree_filter=["Both", "In-Degree", "Out-Degree"][0],
+            # degree_filter=None,
+            department_filter=department_filter,
+            node_pair_efficiency=float(node_pair_efficiency),
+            degree_filter=degree_filter,
         )
         app.logger.info(
             f"Graph JSON file saved at: {helper.get_graph_json_path()}"

@@ -41,10 +41,49 @@
                     <div class="row g-0 mt-3 mx-3">
                         <div class="col-12">
                             <label>Minimum Referrals</label>
-                            <input type="number" class="form-control" name="min-referrals" value="1" min="1"><br>
+                            <input type="number" class="form-control" name="min-referrals" value="1" min="1">
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-primary float-end mx-3" value="Apply">
+                    <div class="row g-0 mt-3 mx-3">
+                        <div class="col-12">
+                            <label>Department</label>
+                            <select class="form-control" name="department-filter">
+                                <option>All</option>
+                                <option>Primary Care</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-0 mt-3 mx-3">
+                        <div class="col-12">
+                            <label>Node Pair Efficiency</label>
+                            <select class="form-control" name="node-pair-efficiency">
+                                <option>0.0</option>
+                                <option>0.1</option>
+                                <option>0.2</option>
+                                <option>0.4</option>
+                                <option>0.6</option>
+                                <option>0.8</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-0 mt-3 mx-3">
+                        <div class="col-12">
+                            <label>Degree Directionality</label>
+                            <select class="form-control" name="degree-filter">
+                                <option>All</option>
+                                <option>Both</option>
+                                <option>In-Degree</option>
+                                <option>Out-Degree</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-0 m-3">
+                        <div class="col-12">
+                            <input type="submit" class="btn btn-primary float-end" value="Apply">
+                        </div>
+                    </div>
+                    <!-- <input type="submit" class="btn btn-primary float-end mt-3 mx-3" value="Apply"> -->
                 </form>
             </div>
             <div class="col-9">
