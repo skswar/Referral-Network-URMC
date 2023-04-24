@@ -244,23 +244,22 @@ def graphjson_from_df(
 
 
     if degree_filter and degree_filter != "All":
-        # ## code for In-Out Degree View
-        # input_var = "Out-Degree" ##three values are 'Both', 'In-Degree', 'Out-Degree'
-        # degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{input_var}"')['node'].values)
-
-        ## code for In-Out Degree View
-        # input_var = "Out-Degree" ##three values are 'Both', 'In-Degree', 'Out-Degree'
-        degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{degree_filter}"')['node'].values)
-
-        # synthetic_referral_grp.query\
-        #             (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
-
-        synthetic_referral_grp = synthetic_referral_grp.query\
-                    (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
+        if degree_filter == "Out-Degree":
+            degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{degree_filter}"')['node'].values)
+            synthetic_referral_grp = synthetic_referral_grp.query\
+            (f"`Referred From` in {degree_dropdown_nodelist}")
+        elif degree_filter == "In-Degree":
+            degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{degree_filter}"')['node'].values)
+            synthetic_referral_grp = synthetic_referral_grp.query\
+            (f"`Referred To` in {degree_dropdown_nodelist}")
+        else:
+            degree_dropdown_nodelist = list(nodesize_df.query(f'Degree_Dropdown=="{degree_filter}"')['node'].values)
+            synthetic_referral_grp = synthetic_referral_grp.query\
+            (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
 
     """#### Calculating Number of Outgoing and Incoming Connection For Each Node"""
 
-    outgoing_connection =  list(synthetic_referral['Referred From'])
+    outgoing_connection =  list(synthetic_referral_grp['Referred From'])
     node_size_og = dict()
     for i in sorted(outgoing_connection):
         node_size_og[i] = node_size_og.get(i, 0)+1
@@ -268,10 +267,23 @@ def graphjson_from_df(
     node_size_og = pd.DataFrame(list(node_size_og.items()), columns=['node','og_appearnce_cnt'])
 
 
-    incoming_connection =  list(synthetic_referral['Referred To'])
+    incoming_connection =  list(synthetic_referral_grp['Referred To'])
     node_size_in = dict()
     for i in sorted(incoming_connection):
         node_size_in[i] = node_size_in.get(i, 0)+1
+
+    # outgoing_connection =  list(synthetic_referral['Referred From'])
+    # node_size_og = dict()
+    # for i in sorted(outgoing_connection):
+    #     node_size_og[i] = node_size_og.get(i, 0)+1
+        
+    # node_size_og = pd.DataFrame(list(node_size_og.items()), columns=['node','og_appearnce_cnt'])
+
+
+    # incoming_connection =  list(synthetic_referral['Referred To'])
+    # node_size_in = dict()
+    # for i in sorted(incoming_connection):
+    #     node_size_in[i] = node_size_in.get(i, 0)+1
         
     node_size_ic = pd.DataFrame(list(node_size_in.items()), columns=['node','in_appearnce_cnt'])
 
