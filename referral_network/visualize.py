@@ -107,23 +107,10 @@ def graphjson_from_df(
                                         "Total Days to Schedule": s["Days to Schedule"].sum(),\
                                         "count_of_appointments": s["Days to Schedule"].count()})).reset_index()
 
-    if minimum_referrals:
-        synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["count_of_appointments"] >= minimum_referrals]
-
-    # if department_filter:
-    #     synthetic_referral_grp = synthetic_referral_grp.query(
-    #         f"(`Referred From` == {department_filter}) | (`Referred To` == {department_filter})"
-    #     )
-
     synthetic_referral_grp['Referring_DepartmentName'] = np.where(synthetic_referral_grp['Referred From']==2,\
                                                     'Primary Care','Other')
     synthetic_referral_grp['Referred_To_DepartmentName'] = np.where(synthetic_referral_grp['Referred To']==2,\
                                                     'Primary Care','Other')
-
-    if department_filter and department_filter != "All":
-        synthetic_referral_grp = synthetic_referral_grp.query(
-            f"(`Referring_DepartmentName` == '{department_filter}') | (`Referred_To_DepartmentName` == '{department_filter}')"
-        )
 
     synthetic_referral_grp['node_pair_efficiency'] = synthetic_referral_grp['count_of_appointments']/\
                                                         synthetic_referral_grp["Total Days to Schedule"]
@@ -146,11 +133,6 @@ def graphjson_from_df(
 
     synthetic_referral_grp['node_pair_efficiency_scaled'] = MinMaxScaler().fit_transform\
             (np.array(synthetic_referral_grp['node_pair_efficiency']).reshape(-1,1))
-
-    if node_pair_efficiency:
-        # TODO: handle case where no nodes match
-        print(f"{node_pair_efficiency=}")
-        synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["node_pair_efficiency_scaled"] >= node_pair_efficiency]
 
     synthetic_referral_grp['count_of_appointments_norm'] = StandardScaler().fit_transform\
             (synthetic_referral_grp[['count_of_appointments']]).flatten()
@@ -244,7 +226,22 @@ def graphjson_from_df(
     nodesize = dict(zip(nodesize_df['node'],nodesize_df['node_size']))
     degree_dropdown = dict(zip(nodesize_df['node'],nodesize_df['Degree_Dropdown']))
 
-    """**This part of the in-out degree view code part which I have sent you in Teams as well**"""
+    """Add filters here"""
+
+    if minimum_referrals:
+        synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["count_of_appointments"] >= minimum_referrals]
+
+
+    if department_filter and department_filter != "All":
+        synthetic_referral_grp = synthetic_referral_grp.query(
+            f"(`Referring_DepartmentName` == '{department_filter}') | (`Referred_To_DepartmentName` == '{department_filter}')"
+        )
+
+    if node_pair_efficiency:
+        # TODO: handle case where no nodes match
+        print(f"{node_pair_efficiency=}")
+        synthetic_referral_grp = synthetic_referral_grp[synthetic_referral_grp["node_pair_efficiency_scaled"] >= node_pair_efficiency]
+
 
     if degree_filter and degree_filter != "All":
         # ## code for In-Out Degree View
@@ -260,7 +257,6 @@ def graphjson_from_df(
 
         synthetic_referral_grp = synthetic_referral_grp.query\
                     (f"`Referred From` in {degree_dropdown_nodelist} | `Referred To` in {degree_dropdown_nodelist}")
-
 
     """#### Calculating Number of Outgoing and Incoming Connection For Each Node"""
 
@@ -310,6 +306,10 @@ def graphjson_from_df(
     # for e.g. we found it is only connected with 2 and not with 7, 10 etc")
     # for i in dict_degree_centrality[:5]:
     #     print("Department: ",i[0])
+
+
+
+
 
     """#### Trying To Build Graph With Plotly"""
 
