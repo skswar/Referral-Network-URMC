@@ -20,6 +20,7 @@
     * [By minimum referrals](#by-minimum-referrals)
     * [By department](#by-department)
     * [By node pair efficiency](#by-node-pair-efficiency)
+* [Flask app demo](#flask-app-demo)
 * [Future improvements](#future-improvements)
 * [Contributors](#contributors)
 * [Acknowledgements](#acknowledgements)
@@ -164,6 +165,10 @@ It is possible to filter the visualization by department, i.e., only referrals t
 ### By node pair efficiency
 
 *Node pair efficiency* is a measure of how efficient a node pair is in processing referrals. It is calculated by dividing the total number of referrals made between two nodes by the total number of days needed to schedule those referrals. Then, once all node pair efficiencies have been calculated, min-max normalization is applied; thus, an efficiency of 0 represents the least efficient node in terms of processing referrals, where 1 indicates the opposite.
+
+## Flask app demo
+
+[![Watch the video](https://img.youtube.com/vi/LtMSpDlgQrM/maxresdefault.jpg)](https://youtu.be/LtMSpDlgQrM)
 
 ## Future improvements
 
