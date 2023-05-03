@@ -1,4 +1,6 @@
-<h1 align="center">Specialty Referral Network</h1>
+<div align="center">
+<img src="https://raw.githubusercontent.com/jakebrehm/referral-network/master/img/logo.png" alt="Referral Network Logo"/>
+</div>
 
 <h4 align="center">Can we visualize the bottlenecks that occur in the specialty referral network so that opportunities for improvement can be further explored?</h4>
 
@@ -197,4 +199,4 @@ The following potential improvements are listed in no particular order.
 
 ## Acknowledgements
 
-We thank Dr. Kathleen Fear (UR Medicine) and Dr. Justin Zelenka (UR Medicine) for providing the opportunity to conduct research on this subject, providing data, and regularly engaging with us in helpful discussions.
+We thank [Dr. Kathleen Fear](https://www.linkedin.com/in/kathleen-fear/) (UR Medicine) and [Dr. Justin Zelenka](https://www.urmc.rochester.edu/people/29494170-justin-zelenka) (UR Medicine) for providing the opportunity to conduct research on this subject, providing data, and regularly engaging with us in helpful discussions.
