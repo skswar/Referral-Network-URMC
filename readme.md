@@ -11,6 +11,7 @@
     * [Required dependencies](#required-dependencies)
     * [Installing the dependencies](#installing-the-dependencies)
 * [Starting the web application](#starting-the-web-application)
+* [Debug mode](#debug-mode)
 * [Formatting the input data](#formatting-the-input-data)
 * [About the visualization](#about-the-visualization)
     * [Node color](#node-color)
@@ -96,6 +97,16 @@ python referral_network/app.py
 
 To deactivate the virtual environment and exit the shell at any point, type `exit`. To deactivate the virtual environment without leaving the shell, type `deactivate`, although this usage is much less common.
 
+## Debug mode
+
+To run the Flask application in debug mode, which is recommended if not being used in a production environment until the project is in a more stable state, use the `-d` or `--debug` command line argument.
+
+```
+python referral_network/app.py -d
+```
+
+This option will display a page that allows the user to determine where the error is occurring. It will also send all logging messages to the console instead of to a file that is stored on disk.
+
 ## Formatting the input data
 
 The input data must be in *CSV* format with a header, and include the columns that match the schema shown in the table below.
@@ -174,6 +185,8 @@ The following potential improvements are listed in no particular order.
 - Add tooltips to UI items such as the customizability controls
 - Implement a memory of the visualization settings between sessions
 - Added more customizability to the visualization via the sidebar
+- Should check if CSV file is formatted correctly, and return an error if not
+- Need to sanitize input, e.g., negative minimum referral values should be prohibited
 
 <hr>
 

@@ -6,8 +6,7 @@ Main entry point for the Flask web application.
 """
 
 
-import io
-import json
+import argparse
 import logging
 import os
 
@@ -18,9 +17,6 @@ import config
 import helper
 import visualize
 
-
-# # Configure logging module
-# logging.basicConfig(filename=helper.get_logging_path(), level=logging.WARNING)
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -70,9 +66,6 @@ def upload():
         if file_to_upload and helper.valid_filetype(file_to_upload.filename):
             app.logger.info("CSV file was uploaded")
 
-            # TODO: Check if format is correct
-            ...
-
             # Save the file to disk for easy access
             file_to_upload.save(helper.get_graph_csv_path())
 
@@ -117,11 +110,6 @@ def modify():
         degree_filter = request.form.get("degree-filter")
         app.logger.info(f"Setting degree directionality: {degree_filter}")
 
-        # TODO: Handle minimum referrals <= 0
-
-        # TODO: Check if format is correct
-        ...
-
         # Read file into dataframe
         df = pd.read_csv(helper.get_graph_csv_path())
 
@@ -131,11 +119,6 @@ def modify():
             df,
             output_path=helper.get_graph_json_path(),
             minimum_referrals=int(minimum_referrals),
-            # degree_filter="Out-Degree",
-            # degree_filter="In-Degree",
-            # degree_filter="Both",
-            # degree_filter=["Both", "In-Degree", "Out-Degree"][0],
-            # degree_filter=None,
             department_filter=department_filter,
             node_pair_efficiency=float(node_pair_efficiency),
             degree_filter=degree_filter,
@@ -149,5 +132,31 @@ def modify():
 
 
 if __name__ == "__main__":
+
+    # Initialize the command line argument parser
+    parser = argparse.ArgumentParser()
+
+    # Allow the user to specify whether or not to run in debug mode
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help=(
+            "Whether or not to run the Flask application in debug mode."
+        ),
+    )
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Create the upload folder if necessary
     helper.create_upload_folder()
-    app.run(debug=True)
+
+    # Log warnings and above to file if not in debug mode
+    if not args.debug:
+        logging.basicConfig(
+            filename=helper.get_logging_path(), level=logging.WARNING
+        )
+
+    # Run the Flask application
+    app.run(debug=args.debug)
