@@ -189,6 +189,8 @@ The following potential improvements are listed in no particular order.
 - Added more customizability to the visualization via the sidebar
 - Should check if CSV file is formatted correctly, and return an error if not
 - Need to sanitize input, e.g., negative minimum referral values should be prohibited
+- Add information such as cetrality measures to better inform nodal connections
+- Community detection algorithm built in for large datasets
 
 <hr>
 
