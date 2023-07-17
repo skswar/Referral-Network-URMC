@@ -34,6 +34,8 @@
 
 At the University of Rochester Medical Center (UR Medicine), referrals typically originate in primary care and are sent out to the appropriate internal and external specialty practices. Ideally, these referrals are sent out upon request and processed immediately, without too much hassle for the medical staff or the patient. Unfortunately, it is not uncommon for bottlenecks to occur in the referral pipeline, leading to extra work for the medical team and added uncertainty for the patient. In this project, our goal is to be able to identify where these bottlenecks are occurring—i.e., which departments and specialties are least efficient, and if there are any referral pathways that are convoluted in particular. We worked toward this objective through the use of an intuitive network visualization that is embedded in a web application.
 
+**Link To Technical Report**: [Referral Network](<https://github.com/skswar/Referral-Network-URMC/blob/master/Technical%20Report/Referral_Network_Technical_Report_Sayan_Jake.pdf>)
+
 ## Getting set up
 
 The source code can be viewed on GitHub [here](https://github.com/jakebrehm/referral-network).
