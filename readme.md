@@ -38,7 +38,7 @@ At the University of Rochester Medical Center (UR Medicine), referrals typically
 
 ## Getting set up
 
-The source code can be viewed on GitHub [here](https://github.com/jakebrehm/referral-network).
+The source code can be viewed on GitHub [here](https://github.com/skswar/Referral-Network-URMC).
 
 ### Required dependencies
 
